@@ -1,0 +1,10 @@
+name = "arg_parser"
+description = "CLI Argument Parser"
+version = "0.1.0-dev"
+
+authors = ["T. Kurt Bond"]
+maintainers = ["T. Kurt Bond <tkurtbond@gmail.com>"]
+maintainers-logins = ["tkurtbond"]
+licenses = "GPL-3.0-or-later and GPL-3.0-or-later with GCC-exception-3.1"
+website = ""
+tags = ["cli"]

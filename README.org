@@ -1,0 +1,45 @@
+This Ada package implements a command line argument parser.
+
+It supports both long and short option names and can be used to
+implement programs that provide multiple commands, like *git*.
+
+The programmer specifies how command line options/switches should be
+handled as an array of ~Option~ data structures, which is passed to
+the function ~Make_Argument_Parser~ along with a handler function for
+arguments that are not options.  The ~Make_Argument_Parser~ function
+returns an ~Argument_Parser~, which is then passed to the
+~Parse_Arguments~ procedure to actually perform the processing of
+arguments.
+
+Note that unlike many argument parsers that store the values of
+options and then deliver the values to programmer at the end of
+processing along with the non-option arguments, *Arg_Parser*
+intermingles the processing of options and non-option arguments,
+allowing more flexibility.
+
+It was inspired by a [[https://git.sr.ht/~jemarch/godcc/tree/master/item/src/argp.a68][command line parser written in Algol 68]], as well
+as the [[https://wiki.call-cc.org/eggref/5/args#args][Chicken Scheme Args]] module and the [[https://ocaml.org/manual/5.4/api/type_Arg.html][OCaml Arg]] module. 
+
+The license is "GPL-3.0-or-later and GPL-3.0-or-later with GCC-exception-3.1".
+
+* The package source is [[file:src/arg_parser.ads][arg_parser.ads]] and [[file:src/arg_parser.adb][arg_parser.adb]].
+* Example programs
+These example programs just demostrate how to write programs that use
+this package, but don't do anything else useful.
+** [[file:examples/src/simple.adb][simple.adb]]
+This program excercises all the option types.
+** [[file:examples/src/simple2.adb][simple2.adb]] (and associated [[file:examples/src/simple2_args.ads][simple2_args.ads]] and [[file:examples/src/simple2_args.adb][simple2_args.adb]] packages)
+** [[file:examples/src/compound.adb][compound.adb]] (and associated [[file:examples/src/compound_args.ads][compound_args.ads]] and [[file:examples/src/compound_args.adb][compound_args.adb]] packages)
+This program implements multiple commands, like git.
+*** Example invocation and output:
+#+BEGIN_SRC bash
+  $ compound -v show -p -f this item
+  Do_Main_Verbose called
+  Do_Show_Parsable called
+  Do_Show_Format called with "this"
+  Show_Argument_Handler called with "item"
+  Compound is exiting
+#+END_SRC
+*** [[file:examples/src/need_either.adb][need_either.adb]]
+This program shows that each option needs at least either the short
+name or the long name to be defined.

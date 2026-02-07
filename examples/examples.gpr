@@ -1,0 +1,21 @@
+with "../config/arg_parser_config.gpr";
+with "../arg_parser.gpr";
+
+project Examples is
+   for Source_Dirs use ("src");
+   for Object_Dir use "obj/" & Arg_Parser_Config.Build_Profile;
+   for Create_Missing_Dirs use "True";
+
+   package Compiler is
+      for Default_Switches ("Ada") use Arg_Parser_Config.Ada_Compiler_Switches;
+   end Compiler;
+
+   package Binder is
+      for Switches ("Ada") use
+        ("-E"                   -- Exceptions
+         ,"-s"                  -- Symbolic traceback
+        );
+   end Binder;
+
+   for Main use ("need_either", "simple", "simple2", "compound");
+end Examples;

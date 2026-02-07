@@ -1,0 +1,41 @@
+* DONE Argument_Parser: Convert from a plain array of Options to an object that holds everything.
+This way there is somewhere to save the description of the arg
+parser, so the arg parser can generate the usage message from that and the list
+of options automatically.
+#+BEGIN_SRC ada
+  type Command_Array is array (Positive range <>) of Option_Array;
+  Make_Arg_Parser (Description : String; Options : Option_Array)
+    return Arg_Parser_Type;
+  Make_Arg_Parser (Description : String; Commands : Command_Array)
+    return Arg_Parseer_Type;
+    Usage_String (Arg_Parser : Arg_Parser_Type) return String;
+#+END_SRC
+* DONE Make Long_Name optional.
+It always was, since we're checking against the null string.
+* DONE Won't Change: Rename Handler_Type to Option_Handler_Type for symmetry.
+Looked at the Ada Style Guide and it says not to use _Type suffixes. 
+* DONE Why are there descriptions in both command and argument_parser?
+* TODO Do thorough testing (write test scripts) before merging Argument_Parser changes.
+* TODO Compare to other command line argument parsers
+** [[https://github.com/jhumphry/parse_args][Parse_Args]]
+** [[https://adacl.sourceforge.net/gnatdoc/adacl/index.html][AdaCL.Command_Line.GetOpt]]
+Alire: [[https://alire.ada.dev/crates/adacl][Ada Class Library: Strings, Tracing, AUnit, Smart Pointers, Getopt]]
+** [[https://github.com/alire-project/clic][Command Line Interface Components]]
+** [[https://git.sr.ht/~nytpu/getopt-ada][getopt-ada — POSIX getopt(3) for Ada]]
+** [[https://gcc.gnu.org/onlinedocs/gnat_rm/GNAT-Command_005fLine-g-comlin-ads.html#GNAT-Command_005fLine-g-comlin-ads][GNAT.Command_Line]] (getopt)
+* Add type specific options that validate the types of the values supplied
+For at least Integer, Natural, Positive, and Boolean, and others that
+save the resulting value in a user supplied variable.  In simpler ones
+the user has to write code to save the value.  You need both because
+sometimes you need to do something more complicated as the result of
+any that just store a value.  Also, you should be able to specify a
+range.
+* TODO Come up with a better name!
+* DONE Use limited private type for Option, Argument_Parser, and Command.
+* TODO Convert to an alire crate!
+* TODO Finish writing Usage procedure. 
+* TODO Optional arguments?
+* TODO Compare systemctl --help and git --help output and improve the Usage printer.
+* TODO Make the Put, Put_Line, New_Line, and Set_Col available outside somehow?
+* DONE BUG: --level '' says argument required.
+* TODO Should Parse_Arguments return True if the parsing of the command line arguments succeeded and False if it doesn't?

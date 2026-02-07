@@ -1,0 +1,13 @@
+#! /usr/bin/env bash
+# Run from arg_parser/examples
+
+obj/development/simple \
+    --string="A string!" \
+    --set-string "The string is set to this" \
+    --unbounded "The passed unbounded string" \
+    --set-unbounded="The set unbounded string" \
+    -i 10 --set-integer=-10 \
+    -n 20 --set-natural=30 \
+    -p 40 --set-positive=50 \
+    --set-true --set-false --toggle \
+    -a --long-name
