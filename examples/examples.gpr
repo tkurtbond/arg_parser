@@ -13,7 +13,7 @@ project Examples is
    package Binder is
       for Switches ("Ada") use
         ("-E"                   -- Exceptions
-         ,"-s"                  -- Symbolic traceback
+         -- ,"-s"                  -- Symbolic traceback
         );
    end Binder;
 

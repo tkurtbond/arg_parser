@@ -1,8 +1,6 @@
 with Ada.Text_IO;              use Ada.Text_IO;
-with Ada.Text_IO.Unbounded_IO; use Ada.Text_IO.Unbounded_IO;
 with Ada.Strings;              use Ada.Strings;
 with Ada.Strings.Fixed;        use Ada.Strings.Fixed;
-with Ada.Strings.Unbounded;    use Ada.Strings.Unbounded;
 with Ada.Command_Line;         use Ada.Command_Line;
 with Ada.Exceptions;           use Ada.Exceptions;
 
@@ -20,30 +18,33 @@ package body Arg_Parser is
       Out_File := Standard_Error;
    end Error_Seen;
 
+   procedure UFlush is
+   begin
+      Flush (Out_File.all);
+   end UFlush;
+
    procedure UPut (Message : String) is
    begin
       Put (Out_File.all, Message);
+      UFlush;
    end UPut;
 
    procedure UPut_Line (Message : String) is
    begin
       Put_Line (Out_File.all, Message);
+      UFlush;
    end UPut_Line;
 
    procedure UNew_Line is
    begin
       New_Line (Out_File.all);
+      UFlush;
    end UNew_Line;
 
    procedure USet_Col (To : Positive_Count) is
    begin
       Set_Col (Out_File.all, To);
    end USet_Col;
-
-   procedure UFlush is
-   begin
-      Flush (Out_File.all);
-   end UFlush;
 
    function Make_Option
      (Description  : String    := "";
