@@ -448,37 +448,12 @@ package body Arg_Parser is
                raise Invalid_Option_Argument with "Invalid option argument """ & Arg & """ for option """ & Flag & """";
          end Verify_Integer;
 
-         function Verify_Natural return Natural is
-            Natural_Arg : Natural := Natural'Value (Arg);
-         begin
-            if Natural_Arg < Opt.Natural_First or else Natural_Arg > Opt.Natural_Last then
-               raise Invalid_Option_Argument with
-                 "Value """ & Arg & """ not in range " &
-                 Trim (Opt.Natural_First'Image, Both) & ".." & Trim (Opt.Natural_Last'Image, Both) &
-                 " for option """ & Flag & """";
-            end if;
-            return Natural_Arg;
-         exception
-            when Constraint_Error =>
-               raise Invalid_Option_Argument with "Invalid option argument """ & Arg & """ for option """ & Flag & """";
-         end Verify_Natural;
-
-         function Verify_Positive return Positive is
-            Positive_Arg : Positive := Positive'Value (Arg);
-         begin
-            if Positive_Arg < Opt.Positive_First or else Positive_Arg > Opt.Positive_Last then
-               raise Invalid_Option_Argument with
-                 "Value """ & Arg & """ not in range " &
-                 Trim (Opt.Positive_First'Image, Both) & ".." & Trim (Opt.Positive_Last'Image, Both) &
-                 " for option """ & Flag & """";
-            end if;
-            return Positive_Arg;
-         exception
-            when Constraint_Error =>
-               raise Invalid_Option_Argument with "Invalid option argument """ & Arg & """ for option """ & Flag & """";
-         end Verify_Positive;
-
       begin
+         --  Natural_Option, Set_Natural_Option, Positive_Option,
+         --  Set_Positive_Option all just use Verify_Integer, because
+         --  the *_First and *_Last values are constrainted by the
+         --  subtype on the arguments to the Make_* functions and by
+         --  subtypes in the Option type.
          case Opt.Kind is
             when No_Argument_Option =>
                return Opt.Handler.all;
