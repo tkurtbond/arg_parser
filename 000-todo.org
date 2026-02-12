@@ -42,3 +42,4 @@ range.
 * TODO Should have better way or exmaple of how usage from -h/--help is different from usage from error.
 * TODO Optionally wrap long option descriptions?
 * TODO Check option descriptions for ASCII.NL & chunk them into separate indented continuation lines.
+* TODO Can this be rewritten using generics?
