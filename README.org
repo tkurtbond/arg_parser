@@ -5,25 +5,42 @@ This Ada package implements a command line argument parser.
 It supports both long and short option names and can be used to
 implement programs that provide multiple commands, like *git*.
 
-The options are represented by an array of variables of the ~Option~
+The options are represented by an array of values of the ~Option~
 type, which has a number of different variants which represent the
 different types of actions that can preformed when each option is
-processed.  There are separate constructures for each variant of
-option.  When processed, options can store values (passed as access to
-variables) or call functions to process the option (passed as access
-to function values).
+processed There are separate constructors for each variant of option,
+which are passed a description of the option, the short and long names
+(at least one of which must be specified), and any other information
+necessary for defining the option.  When processed, options can store
+values (passed as access to variables) or call functions to process
+the option (passed as access to function values).  There are options
+for processing Strings, Unbounded_Strings, Integers, Naturals,
+Positives, and Booleans.
 
-The array of options are passed to the function ~Make_Argument_Parser~
-along with a handler function for arguments that are not options.  The
-~Make_Argument_Parser~ function returns an ~Argument_Parser~, which is
-then passed to the ~Parse_Arguments~ procedure to actually perform the
-processing of arguments.
+A description of the argument parser and the array of options are
+passed to the function ~Make_Argument_Parser~ along with a handler
+function for arguments that are not options, which returns a value of
+the type ~Argument_Parser~.  This is then passed to the
+~Parse_Arguments~ procedure to actually perform the processing of
+arguments.
+
+If a program implements multiple commands then each command is represented
+by a value of the ~Command~ type, which is constructed by the
+~Make_Command~ constructor, which is passed the command name and a
+subordinate argument parser created as usual.  
+An array containing these commands is paassed to the main argument
+parser along with the it options, and the main argument parser is
+passed to ~Parse_Arguments~, which invokes the argument parsers for
+the commands as necessary.
 
 Note that unlike many argument parsers that store the values of
 options and then deliver the values to programmer at the end of
 processing along with the non-option arguments, *Arg_Parser*
 intermingles the processing of options and non-option arguments,
 allowing more flexibility.
+
+The typical usage message for a program is generated automatically
+from the arrays of options and commands.
 
 It was inspired by a [[https://git.sr.ht/~jemarch/godcc/tree/master/item/src/argp.a68][command line parser written in Algol 68]], as well
 as the [[https://ocaml.org/manual/5.4/api/type_Arg.html][OCaml Arg]] module and the [[https://wiki.call-cc.org/eggref/5/args#args][Chicken Scheme Args]] module.
@@ -37,7 +54,36 @@ These example programs just demostrate how to write programs that use
 this package, but don't do anything else useful.
 
 - [[file:examples/src/simple.adb][simple.adb]] excercises all the option types, with all
-  the source in one file, using the GNAT-specific ~'Unrestricted_Access~ attribute.
+  the source in one file, using the GNAT-specific
+  ~'Unrestricted_Access~ attribute.
+
+  Here is the usage message for ~simple~:
+  #+BEGIN_SRC bash
+    $ simple -h
+    simple [options] arguments...
+
+    -h, --help                    Call a function for an option that has no argument.  Also, print a help message.
+    -s ARG, --string=ARG          Call a function on the argument of a string option
+    -S ARG, --set-string=ARG      Set an, via an accesss, a String to the argument of an option.
+    -u ARG, --unbounded=ARG       Call a function that takes an Unbounded_String on the argument option.
+    -U ARG, --set-unbounded=ARG   Set an Unbounded_String variable to the argument to an option
+    -i ARG, --integer=ARG         Call a function on an Integer that was the value of an argument to an option.
+    -I ARG, --set-integer=ARG     Set an Integer variable to the value of the argument to an option
+    -n ARG, --natural=ARG         Call a function on an Natural that was the value of an argument to an option.
+    -N ARG, --set-natural=ARG     Set an Natural variable to the value of the argument to an option
+    -p ARG, --positive=ARG        Call a function on an Positive that was the value of an argument to an option.
+    -P ARG, --set-positive=ARG    Set an Positive variable to the value of the argument to an option
+    -t, --set-true                Set a Boolean variable to true directly.
+    -f, --set-false               Set a Boolean variable to false directly.
+    -T, --toggle                  Toggle a Boolean variable directly.
+    -a                            This option has only a short name, and calls a function with no argument.
+    --long-name                   This option has only a long name, and calls a function with no argument.
+
+    Execution of obj/development/simple terminated by unhandled exception
+    raised SIMPLE.DO_HELP.END_PROGRAM : simple.adb:188
+    Call stack traceback locations:
+    0x4025c5 0x406366 0x406f4f 0x40b3b4 0x40314c 0x40402e 0x7f932cffb5b3 0x7f932cffb666 0x401bd3 0xfffffffffffffffe
+  #+END_SRC
 - [[file:examples/src/simple2.adb][simple2.adb]] (and the associated [[file:examples/src/simple2_args.ads][simple2_args.ads]] and [[file:examples/src/simple2_args.adb][simple2_args.adb]]
   package) shows how to use this if you don't want to use ~'Unrestricted_Access~.
 - [[file:examples/src/compound.adb][compound.adb]] (and the associated [[file:examples/src/compound_args.ads][compound_args.ads]] and [[file:examples/src/compound_args.adb][compound_args.adb]] package)
