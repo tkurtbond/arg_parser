@@ -39,3 +39,4 @@ range.
 * TODO Make the Put, Put_Line, New_Line, and Set_Col available outside somehow?
 * DONE BUG: --level '' says argument required.
 * TODO Should Parse_Arguments return True if the parsing of the command line arguments succeeded and False if it doesn't?
+* TODO Should have better way or exmaple of how usage from -h/--help is different from usage from error.
