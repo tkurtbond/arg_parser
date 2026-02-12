@@ -53,7 +53,7 @@ package body Arg_Parser is
       Handler      : not null Option_Handler) return Option is
    begin
       pragma Assert
-        ((Short_Name /= ASCII.NUL) or else (Long_Name'Length > 0),
+        ((Short_Name /= ASCII.NUL) or (Long_Name'Length > 0),
          "Neither a Short Name or a Long Name were supplied for option with the description """ & Description & """");
       return (No_Argument_Option, Short_Name, +Long_Name, False,
                +Description, Handler);
@@ -66,7 +66,7 @@ package body Arg_Parser is
       Handler      : not null String_Option_Handler) return Option is
    begin
       pragma Assert
-        ((Short_Name /= ASCII.NUL) or else (Long_Name'Length > 0),
+        ((Short_Name /= ASCII.NUL) or (Long_Name'Length > 0),
          "Neither a Short Name or a Long Name were supplied for option with the description """ & Description & """");
       return (Kind              => String_Option,
               Short_Name        => Short_Name,
@@ -83,7 +83,7 @@ package body Arg_Parser is
       Variable     : not null access String_Reference) return Option is
    begin
       pragma Assert
-        ((Short_Name /= ASCII.NUL) or else (Long_Name'Length > 0),
+        ((Short_Name /= ASCII.NUL) or (Long_Name'Length > 0),
          "Neither a Short Name or a Long Name were supplied for option with the description """ & Description & """");
       return (Kind              => Set_String_Option,
               Short_Name        => Short_Name,
@@ -100,7 +100,7 @@ package body Arg_Parser is
       Handler      : not null Unbounded_String_Option_Handler) return Option is
    begin
       pragma Assert
-        ((Short_Name /= ASCII.NUL) or else (Long_Name'Length > 0),
+        ((Short_Name /= ASCII.NUL) or (Long_Name'Length > 0),
          "Neither a Short Name or a Long Name were supplied for option with the description """ & Description & """");
       return (Kind                     => Unbounded_String_Option,
               Short_Name               => Short_Name,
@@ -117,7 +117,7 @@ package body Arg_Parser is
       Variable     : not null access Unbounded_String) return Option is
    begin
       pragma Assert
-        ((Short_Name /= ASCII.NUL) or else (Long_Name'Length > 0),
+        ((Short_Name /= ASCII.NUL) or (Long_Name'Length > 0),
          "Neither a Short Name or a Long Name were supplied for option with the description """ & Description & """");
       return (Kind                 => Set_Unbounded_String_Option,
               Short_Name           => Short_Name,
@@ -136,7 +136,7 @@ package body Arg_Parser is
       Last         : Integer := Integer'Last) return Option is
    begin
       pragma Assert
-        ((Short_Name /= ASCII.NUL) or else (Long_Name'Length > 0),
+        ((Short_Name /= ASCII.NUL) or (Long_Name'Length > 0),
          "Neither a Short Name or a Long Name were supplied for option with the description """ & Description & """");
       return (Kind               => Integer_Option,
               Short_Name         => Short_Name,
@@ -157,7 +157,7 @@ package body Arg_Parser is
       Last         : Integer := Integer'Last) return Option is
    begin
       pragma Assert
-        ((Short_Name /= ASCII.NUL) or else (Long_Name'Length > 0),
+        ((Short_Name /= ASCII.NUL) or (Long_Name'Length > 0),
          "Neither a Short Name or a Long Name were supplied for option with the description """ & Description & """");
       return (Kind              => Set_Integer_Option,
               Short_Name        => Short_Name,
@@ -178,7 +178,7 @@ package body Arg_Parser is
       Last         : Natural := Natural'Last) return Option is
    begin
       pragma Assert
-        ((Short_Name /= ASCII.NUL) or else (Long_Name'Length > 0),
+        ((Short_Name /= ASCII.NUL) or (Long_Name'Length > 0),
          "Neither a Short Name or a Long Name were supplied for option with the description """ & Description & """");
       return (Kind              => Natural_Option,
               Short_Name        => Short_Name,
@@ -199,7 +199,7 @@ package body Arg_Parser is
       Last         : Natural := Natural'Last) return Option is
    begin
       pragma Assert
-        ((Short_Name /= ASCII.NUL) or else (Long_Name'Length > 0),
+        ((Short_Name /= ASCII.NUL) or (Long_Name'Length > 0),
          "Neither a Short Name or a Long Name were supplied for option with the description """ & Description & """");
       return (Kind              => Set_Natural_Option,
               Short_Name        => Short_Name,
@@ -220,7 +220,7 @@ package body Arg_Parser is
       Last         : Positive := Positive'Last) return Option is
    begin
       pragma Assert
-        ((Short_Name /= ASCII.NUL) or else (Long_Name'Length > 0),
+        ((Short_Name /= ASCII.NUL) or (Long_Name'Length > 0),
          "Neither a Short Name or a Long Name were supplied for option with the description """ & Description & """");
       return (Kind              => Positive_Option,
               Short_Name        => Short_Name,
@@ -241,7 +241,7 @@ package body Arg_Parser is
       Last         : Positive := Positive'Last) return Option is
    begin
       pragma Assert
-        ((Short_Name /= ASCII.NUL) or else (Long_Name'Length > 0),
+        ((Short_Name /= ASCII.NUL) or (Long_Name'Length > 0),
          "Neither a Short Name or a Long Name were supplied for option with the description """ & Description & """");
       return (Kind               => Set_Positive_Option,
               Short_Name         => Short_Name,
@@ -264,7 +264,7 @@ package body Arg_Parser is
       Variable     : not null access Boolean) return Option is
    begin
       pragma Assert
-        ((Short_Name /= ASCII.NUL) or else (Long_Name'Length > 0),
+        ((Short_Name /= ASCII.NUL) or (Long_Name'Length > 0),
          "Neither a Short Name or a Long Name were supplied for option with the description """ & Description & """");
       return (Kind => Set_Boolean_True_Option,
               Short_Name           => Short_Name,
@@ -281,7 +281,7 @@ package body Arg_Parser is
       Variable     : not null access Boolean) return Option is
    begin
       pragma Assert
-        ((Short_Name /= ASCII.NUL) or else (Long_Name'Length > 0),
+        ((Short_Name /= ASCII.NUL) or (Long_Name'Length > 0),
          "Neither a Short Name or a Long Name were supplied for option with the description """ & Description & """");
       return (Kind => Set_Boolean_False_Option,
               Short_Name           => Short_Name,
@@ -298,7 +298,7 @@ package body Arg_Parser is
       Variable     : not null access Boolean) return Option is
    begin
       pragma Assert
-        ((Short_Name /= ASCII.NUL) or else (Long_Name'Length > 0),
+        ((Short_Name /= ASCII.NUL) or (Long_Name'Length > 0),
          "Neither a Short Name or a Long Name were supplied for option with the description """ & Description & """");
       return (Kind => Toggle_Boolean_Option,
               Short_Name           => Short_Name,
@@ -335,7 +335,7 @@ package body Arg_Parser is
    procedure Usage (Arg_Parser : Argument_Parser) is
       procedure Format_Option (The_Option : Option) is
          Arg_Width       : constant Positive_Count := 30;
-         Both_Names      : Boolean := The_Option.Short_Name /= ASCII.NUL and then The_Option.Long_Name /= Null_Unbounded_String;
+         Both_Names      : Boolean := The_Option.Short_Name /= ASCII.NUL and The_Option.Long_Name /= Null_Unbounded_String;
          Short_Name      : String                  :=
            (if The_Option.Short_Name = ASCII.NUL then ""
             else '-' & The_Option.Short_Name & (if The_Option.Argument_Required then " ARG" else ""));

@@ -18,7 +18,7 @@ tags = ["cli"]
                    ,"-gnaty3" # Specify indentation level of 3
                    ,"-gnatya" # Check attribute casing
                    ,"-gnatyA" # Use of array index numbers in array attributes
-                   ,"-gnatyB" # Check Boolean operators
+                   #,"-gnatyB" # Check Boolean operators
                    ,"-gnatyb" # Blanks not allowed at statement end
                    ,"-gnatyc" # Check comments
                    ,"-gnaty-d" # Disable check no DOS line terminators present
