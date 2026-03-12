@@ -84,8 +84,11 @@ this package, but don't do anything else useful.
     Call stack traceback locations:
     0x4025c5 0x406366 0x406f4f 0x40b3b4 0x40314c 0x40402e 0x7f932cffb5b3 0x7f932cffb666 0x401bd3 0xfffffffffffffffe
   #+END_SRC
-- [[file:examples/src/simple2.adb][simple2.adb]] (and the associated [[file:examples/src/simple2_args.ads][simple2_args.ads]] and [[file:examples/src/simple2_args.adb][simple2_args.adb]]
-  package) shows how to use this if you don't want to use ~'Unrestricted_Access~.
+- [[file:examples/src/simple2.adb][simple2.adb]] (and the associated [[file:examples/src/simple2_args.ads][simple2_args.ads]] and
+  [[file:examples/src/simple2_args.adb][simple2_args.adb]] package) shows how to use this if you don't want to
+  use GNAT's ~'Unrestricted_Access~.  It has exactly the same argument
+  parsing logic as simple.adb, just separated out into a package so it
+  can use ~'Access~.
 - [[file:examples/src/compound.adb][compound.adb]] (and the associated [[file:examples/src/compound_args.ads][compound_args.ads]] and [[file:examples/src/compound_args.adb][compound_args.adb]] package)
   implements multiple commands, like git.
 
