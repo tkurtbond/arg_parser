@@ -7,7 +7,11 @@ project Examples is
    for Create_Missing_Dirs use "True";
 
    package Compiler is
-      for Default_Switches ("Ada") use Arg_Parser_Config.Ada_Compiler_Switches;
+      for Default_Switches ("Ada") use
+        (
+        "-gnatef",                --  Use full source pathnames in brief errors.
+        "-F"                      --  Use full project path name in brief errors.
+        ) & Arg_Parser_Config.Ada_Compiler_Switches;
    end Compiler;
 
    package Binder is

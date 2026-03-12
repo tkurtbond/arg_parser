@@ -173,7 +173,7 @@ procedure Simple is
 
    function Arg_Handler (Start_With : Positive; Arg : String) return Boolean is
    begin
-      Put_Line ("Arg_Handler called with """ & Arg & """");
+      Put_Line ("Arg_Handler called with Starts_With " & Positive'Image (Start_With) & " and Arg " & Arg & """");
       return True;
    end Arg_Handler;
 
@@ -195,6 +195,9 @@ procedure Simple is
    end Tab;
 
 begin
+   Put_Line ("This is output from parsing the command line in the program SIMPLE.");
+   New_Line;
+
    Parse_Arguments (AP);
    New_Line;
    Put_Line ("After parsing the arguments:");

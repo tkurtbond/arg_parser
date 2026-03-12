@@ -1,8 +1,10 @@
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 
---  Arg_Parser is a command line argument parser.  It calls user provided
---  functions on each command line argument, deciding if they are
---  options or not options and calls the appropriate function.
+--  Arg_Parser is a command line argument parser.  It calls user
+--  provided functions on each command line argument, deciding if they
+--  are options or not options and calls the appropriate function.
+--
+--  Unlike most argument parsers
 
 package Arg_Parser is
    Unknown_Option, Unknown_Argument, Argument_Required, Invalid_Option_Argument : exception;
