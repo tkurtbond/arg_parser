@@ -4,7 +4,8 @@ with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
 --  provided functions on each command line argument, deciding if they
 --  are options or not options and calls the appropriate function.
 --
---  Unlike most argument parsers
+--  Unlike most argument parsers, this one doesn't process options
+--  first and then arguments: it processes them all in order.
 
 package Arg_Parser is
    Unknown_Option, Unknown_Argument, Argument_Required, Invalid_Option_Argument : exception;
