@@ -503,14 +503,15 @@ package body Arg_Parser is
                Arg (Arg'First + 2 .. Arg'Last));
          Option_Index : Natural := Get_Option ("--", Option_Name);
 
-         function Find_Option_Argument return String is
+         function Find_Option_Argument (Skip_Next_Option : out Boolean) return String is
          begin
-            if Equals_Index > 0 and then Arg'Last >= Equals_Index + 1 then
+            if Equals_Index > 0 and then Arg'Last >= Equals_Index + 1 then -- The argument is part of the option, after an equals.
+               Skip_Next_Option := False;
                return Arg (Equals_Index + 1 .. Arg'Last);
-            elsif Arg_Index + 1 <= Number_Of_Arguments then
+            elsif Arg_Index + 1 <= Number_Of_Arguments then --The argument is the next option, so note that we'll need to skip it.
                Skip_Next_Option := True;
                return Argument (Arg_Index + 1);
-            else
+            else                -- The required argument was not found.
                Error_Seen;
                raise Argument_Required with Arg;
             end if;
@@ -520,7 +521,7 @@ package body Arg_Parser is
             declare
                Opt      : Option renames Options (Option_Index);
                Option_Argument : String :=
-                 (if Opt.Argument_Required then Find_Option_Argument else "");
+                 (if Opt.Argument_Required then Find_Option_Argument (Skip_Next_Option) else "");
             begin
                Continue := Dispatch_Option_Handler ("--" & Option_Name, Opt, Option_Argument);
             end;
