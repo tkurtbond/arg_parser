@@ -1,0 +1,9 @@
+name = "examples"
+version = "0.1.0"
+description = "Examples for Arg_Parser"
+
+[[depends-on]]
+arg_parser = "*"
+
+[[pins]]
+arg_parser = { path = ".." }

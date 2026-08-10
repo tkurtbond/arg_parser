@@ -1,30 +1,59 @@
-with "config/arg_parser_config.gpr";
 project Arg_Parser is
 
+   Arg_Parser_Version := "0.1.0";
+
+   type Build_Profile_Kind is ("release", "development");
+   Build_Profile : Build_Profile_Kind := external ("BUILD", "development");
+
+
    for Library_Name use "Arg_Parser";
-   for Library_Version use Project'Library_Name & ".so." & Arg_Parser_Config.Crate_Version;
+   case Build_Profile is
+      when "development" =>
+         for Library_Version use Project'Library_Name & ".so." & Arg_Parser_Version & "-dev";
+      when "release" =>
+         for Library_Version use Project'Library_Name & ".so." & Arg_Parser_Version;
+   end case;
 
-   for Source_Dirs use ("src/", "config/");
-   for Object_Dir use "obj/" & Arg_Parser_Config.Build_Profile;
-   for Create_Missing_Dirs use "True";
-   for Library_Dir use "lib";
-
-   type Library_Type_Type is ("relocatable", "static", "static-pic");
-   Library_Type : Library_Type_Type :=
+   for Library_Dir use "lib/" & Build_Profile;
+   type Library_Variety is ("relocatable", "static", "static-pic");
+   Library_Type : Library_Variety :=
      external ("ARG_PARSER_LIBRARY_TYPE", external ("LIBRARY_TYPE", "static"));
    for Library_Kind use Library_Type;
 
+   for Source_Dirs use ("src/", "alire/config/");
+   for Object_Dir use "obj/" & Build_Profile;
+   for Create_Missing_Dirs use "True";
+
+   Ada_Compiler_Switches := ("-gnatef"   --  Use full source pathnames in brief errors.
+                             ,"-F"       --  Use full project path name in brief errors.
+                             ,"-gnatyM132" -- Maximum line length is 132.
+                            );
+
    package Compiler is
-      for Default_Switches ("Ada") use
-        Arg_Parser_Config.Ada_Compiler_Switches &
-          ("-gnatef" --  Use full source pathnames in brief errors.
-           ,"-F" --  Use full project path name in brief errors.
-           ,"-gnatyM132" -- Maximum line length is 132.
-          );
+      case Build_Profile is
+         when "release" =>
+            for Default_Switches ("Ada") use
+              Ada_Compiler_Switches &
+                ();
+         when "development" =>
+            for Default_Switches ("Ada") use
+              Ada_Compiler_Switches &
+                ("-gnata",
+                 "-gnato",
+                 "-gnatE",
+                 "-fstack-check",
+                 "-g");
+      end case;
    end Compiler;
 
+
    package Binder is
-      for Switches ("Ada") use ("-Es"); --  Symbolic traceback
+      case Build_Profile is
+         when "release" =>
+            for Default_Switches("ada") use ();
+         when others    =>
+            for Default_Switches("ada") use ("-Es", "-g");
+      end case;
    end Binder;
 
    package Install is
