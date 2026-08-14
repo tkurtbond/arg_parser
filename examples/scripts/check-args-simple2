@@ -1,7 +1,7 @@
 #! /usr/bin/env bash
 # Run from arg_parser/examples
 
-obj/development/simple2 \
+bin/development/simple2 \
     --string="A string!" \
     --set-string "The string is set to this" \
     --unbounded "The passed unbounded string" \
