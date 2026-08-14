@@ -1,5 +1,6 @@
 #! /usr/bin/env bash
 # Run from arg_parser/examples
+set -x
 
 bin/development/simple2 \
     --string="A string!" \
