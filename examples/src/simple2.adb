@@ -1,3 +1,17 @@
+-- simple2.adb -- A simple example of using Arg_Parser.
+--
+-- This example is not GNAT specific, so it uses a package
+-- simple2_args to define the options and argument handler, using the
+-- Access attribute and not the non-portable GNAT attribute
+-- Unrestricted_Access.
+--
+-- Execute simple2 with the option --help to see the usage message with
+-- all the options explained.
+--
+-- Execute simple2 with no arguments to see all the default values.
+--
+-- See ../scripts/check-args-simple2 for an example with most of the options.
+
 with Ada.Text_IO; use Ada.Text_IO;
 with Ada.Strings; use Ada.Strings;
 with Ada.Strings.Fixed; use Ada.Strings.Fixed;

@@ -1,3 +1,17 @@
+-- simple.adb -- A simple example of using Arg_Parser.
+--
+-- This example is GNAT specific, because it uses the GNAT specific
+-- attribute Unrestricted_Access, which allows it to be just one
+-- source file.  For a version that does not use Unrestricted_Access
+-- see simple2.adb.
+--
+-- Execute simple with the option --help to see the usage message with
+-- all the options explained.
+--
+-- Execute simple with no arguments to see all the default values.
+--
+-- See ../scripts/check-args-simple for an example with most of the options.
+
 with Ada.Strings; use Ada.Strings;
 with Ada.Strings.Fixed; use Ada.Strings.Fixed;
 with Ada.Strings.Unbounded; use Ada.Strings.Unbounded;
@@ -12,20 +26,27 @@ procedure Simple is
    function "+" (S : Unbounded_String) return String renames Ada.Strings.Unbounded.To_String;
 
    The_String : aliased String_Reference; -- It is an access to an access to a string, since you can't have an unconstrained String.
+
    The_Unbounded_String_Default : constant Unbounded_String := +"Default Unbounded_String";
    The_Unbounded_String : aliased Unbounded_String :=  The_Unbounded_String_Default;
+
    The_Integer_Default : constant Integer := -2;
    The_Integer : aliased Integer := The_Integer_Default;
+
    The_Natural_Default : constant Natural := 0;
    The_Natural : aliased Natural := The_Natural_Default;
+
    The_Positive_Default : constant Positive := 100;
    The_Positive : aliased Positive := The_Positive_Default;
+
    --  Defaults to False so we can set it to True.
    The_True_Default : constant Boolean := False;
    The_True : aliased Boolean := The_True_Default;
+
    --  Defaults to True so we can set it to False.
    The_False_Default : constant Boolean := True;
    The_False : aliased Boolean := The_False_Default;
+
    --  Defaults to True so we can toggle it to whatever we want.
    The_Toggle_Default : constant Boolean := True;
    The_Toggle : aliased Boolean := The_Toggle_Default;
@@ -36,7 +57,7 @@ procedure Simple is
 
    function Do_Help return Boolean;
    --  This is a forward declaration because it needs to call Usage on
-   --  the AP, which is declared later.
+   --  the argumenet parser, which is declared later.
 
    function Do_String (Arg : String) return Boolean is
    begin
