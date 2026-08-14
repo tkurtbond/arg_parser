@@ -11,4 +11,4 @@ bin/development/simple \
     -n 20 --set-natural=30 \
     -p 40 --set-positive=50 \
     --set-true --set-false --toggle \
-    -a --long-name
+    -a --long-name an-argument
