@@ -2,6 +2,12 @@
 * Arg_Parser
 This Ada package implements a command line argument parser.
 
+Note that unlike many argument parsers that store the values of
+options and then deliver the values to the programmer at the end of
+processing along with the non-option arguments, *Arg_Parser*
+intermingles the processing of options and non-option arguments,
+allowing more flexibility.
+
 It supports both long and short option names and can be used to
 implement programs that provide multiple commands, like *git*.
 
@@ -32,12 +38,6 @@ An array containing these commands is paassed to the main argument
 parser along with the it options, and the main argument parser is
 passed to ~Parse_Arguments~, which invokes the argument parsers for
 the commands as necessary.
-
-Note that unlike many argument parsers that store the values of
-options and then deliver the values to the programmer at the end of
-processing along with the non-option arguments, *Arg_Parser*
-intermingles the processing of options and non-option arguments,
-allowing more flexibility.
 
 The typical usage message for a program is generated automatically
 from the arrays of options and commands.
