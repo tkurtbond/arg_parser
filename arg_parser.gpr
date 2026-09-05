@@ -27,6 +27,7 @@ project Arg_Parser is
    Ada_Compiler_Switches := ("-gnatef"   --  Use full source pathnames in brief errors.
                              ,"-F"       --  Use full project path name in brief errors.
                              ,"-gnatyM132" -- Maximum line length is 132.
+                             ,"-gnat2012"
                             );
 
    package Compiler is
