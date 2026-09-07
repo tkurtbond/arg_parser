@@ -38,15 +38,15 @@ package Compound_Args is
    Commands : aliased Command_Array :=
      (Make_Command
         ("list",
-         Make_Argument_Parser
+         Make_Parser
            (Description => "list command", Handler => List_Argument_Handler'Access, Options => List_Options'Access)),
       Make_Command
         ("show",
-         Make_Argument_Parser
+         Make_Parser
            (Description => "Show command", Handler => Show_Argument_Handler'Access, Options => Show_Options'Access)));
 
-   AP : Argument_Parser :=
-     Make_Argument_Parser
+   AP : Parser :=
+     Make_Parser
        ("Usage: compund [options] [args] " & ASCII.LF & ASCII.LF &
         "Example of a program that implements multiple commands.",
         Main_Argument_Handler'Access,

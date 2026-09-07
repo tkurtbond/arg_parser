@@ -134,31 +134,31 @@ package Arg_Parser is
       Long_Name    : String    := "";
       Variable     : not null access Boolean) return Option;
 
-   type Argument_Parser is limited private;
-   type Argument_Parser_Array is array (Positive range <>) of Argument_Parser;
+   type Parser is limited private;
+   type Parser_Array is array (Positive range <>) of Parser;
 
    type Command is limited private;
    type Command_Array is array (Positive range <>) of Command;
    type Command_Array_Access is access all Command_Array;
-   function Make_Command (Command_Name : String; Arg_Parser : Argument_Parser) return Command;
+   function Make_Command (Command_Name : String; The_Parser : Parser) return Command;
 
    --  Make an argument parser for programs that DO NOT implement multiple commands.
-   function Make_Argument_Parser
-     (Description : String; Handler : not null Argument_Handler; Options : Option_Array_Access) return Argument_Parser;
+   function Make_Parser
+     (Description : String; Handler : not null Argument_Handler; Options : Option_Array_Access) return Parser;
 
    --  Make an argument parser for programs that implement multiple commands.
    --  It has both a list of options and a list of commands.
-   function Make_Argument_Parser
+   function Make_Parser
      (Description : String;
       Handler     : not null Argument_Handler;
       Options     : Option_Array_Access;
-      Commands    : not null Command_Array_Access) return Argument_Parser;
+      Commands    : not null Command_Array_Access) return Parser;
 
    --  Print a help message.
-   procedure Usage (Arg_Parser : Argument_Parser);
+   procedure Usage (The_Parser : Parser);
 
    --  Parse command line arguments.
-   procedure Parse_Arguments (Arg_Parser : Argument_Parser; Start_With : Positive := 1);
+   procedure Parse_Arguments (The_Parser : Parser; Start_With : Positive := 1);
 
 private
 
@@ -216,11 +216,11 @@ private
 
    type Command is record
       Command_Name : Unbounded_String;
-      --  The description is in the argument parser.
-      Parser       : Argument_Parser;
+      --  The description is in the sub-parser.
+      Sub_Parser   : Parser;
    end record;
 
-   type Argument_Parser is record
+   type Parser is record
       Description : Unbounded_String;
       Handler     : Argument_Handler;
       Options     : Option_Array_Access;

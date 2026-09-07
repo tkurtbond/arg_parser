@@ -198,8 +198,8 @@ procedure Simple is
       return True;
    end Arg_Handler;
 
-   AP : Argument_Parser :=
-     Make_Argument_Parser ("simple [options] arguments...", Arg_Handler'Unrestricted_Access, Options'Unrestricted_Access);
+   AP : Parser :=
+     Make_Parser ("simple [options] arguments...", Arg_Handler'Unrestricted_Access, Options'Unrestricted_Access);
 
    function Do_Help return Boolean is
       End_Program : exception;

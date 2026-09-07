@@ -310,29 +310,29 @@ package body Arg_Parser is
 
    function Make_Command
      (Command_Name : String;
-      Arg_Parser   : Argument_Parser) return Command is
+      The_Parser   : Parser) return Command is
    begin
-      return (+Command_Name, Arg_Parser);
+      return (+Command_Name, The_Parser);
    end Make_Command;
 
-   function Make_Argument_Parser
+   function Make_Parser
      (Description : String;
       Handler     : not null Argument_Handler;
-      Options     : Option_Array_Access) return Argument_Parser is
+      Options     : Option_Array_Access) return Parser is
    begin
       return (+Description, Handler, Options, null);
-   end Make_Argument_Parser;
+   end Make_Parser;
 
-   function Make_Argument_Parser
+   function Make_Parser
      (Description : String;
       Handler     : not null Argument_Handler;
       Options     : Option_Array_Access;
-      Commands    : not null Command_Array_Access) return Argument_Parser is
+      Commands    : not null Command_Array_Access) return Parser is
    begin
       return (+Description, Handler, Options, Commands);
-   end Make_Argument_Parser;
+   end Make_Parser;
 
-   procedure Usage (Arg_Parser : Argument_Parser) is
+   procedure Usage (The_Parser : Parser) is
       procedure Format_Option (The_Option : Option) is
          Arg_Width       : constant Positive_Count := 30;
          Both_Names      : Boolean := The_Option.Short_Name /= ASCII.NUL and The_Option.Long_Name /= Null_Unbounded_String;
@@ -357,29 +357,29 @@ package body Arg_Parser is
          UNew_Line;
       end Format_Option;
    begin
-      if Arg_Parser.Description /= Null_Unbounded_String then
-         UPut_Line (To_String (Arg_Parser.Description));
+      if The_Parser.Description /= Null_Unbounded_String then
+         UPut_Line (To_String (The_Parser.Description));
       end if;
       UNew_Line;
-      if Arg_Parser.Options /= null then
-         for The_Option of Arg_Parser.Options.all loop
+      if The_Parser.Options /= null then
+         for The_Option of The_Parser.Options.all loop
             Format_Option (The_Option);
          end loop;
       end if;
-      if Arg_Parser.Commands /= null then
-         for Command of Arg_Parser.Commands.all loop
+      if The_Parser.Commands /= null then
+         for Command of The_Parser.Commands.all loop
             UNew_Line;
-            Usage (Command.Parser);
+            Usage (Command.Sub_Parser);
          end loop;
       end if;
    end Usage;
 
    procedure Parse_Arguments
-     (Arg_Parser : Argument_Parser;
+     (The_Parser : Parser;
       Start_With : Positive := 1)
    is
-      Options  : Option_Array_Access renames Arg_Parser.Options;
-      Commands : Command_Array_Access renames Arg_Parser.Commands;
+      Options  : Option_Array_Access renames The_Parser.Options;
+      Commands : Command_Array_Access renames The_Parser.Commands;
 
       function Get_Option (Prefix : String; Arg : String) return Positive is
          Unbounded_Arg : Unbounded_String := +Arg;
@@ -424,9 +424,9 @@ package body Arg_Parser is
          Command_Index : Natural := Get_Command (Arg);
       begin
          if Command_Index = 0 then -- It is NOT a command.
-            Continue := Arg_Parser.Handler (Arg_Index + 1, Arg);
+            Continue := The_Parser.Handler (Arg_Index + 1, Arg);
          else                   -- It IS a command.
-            Parse_Arguments (Commands (Command_Index).Parser, Arg_Index + 1);
+            Parse_Arguments (Commands (Command_Index).Sub_Parser, Arg_Index + 1);
             --  Never continue once a subcommand returns.
             Continue := False;
          end if;
@@ -584,17 +584,17 @@ package body Arg_Parser is
       when Error : Unknown_Option    =>
          UPut_Line ("Unknown option " & Exception_Message (Error));
          UNew_Line;
-         Usage (Arg_Parser);
+         Usage (The_Parser);
          raise;
       when Error : Unknown_Argument  =>
          UPut_Line ("Unknown argument " & Exception_Message (Error));
          UNew_Line;
-         Usage (Arg_Parser);
+         Usage (The_Parser);
          raise;
       when Error : Argument_Required =>
          UPut_Line ("Argument Required for option " & Exception_Message (Error));
          New_Line;
-         Usage (Arg_Parser);
+         Usage (The_Parser);
          raise;
       when Error : Invalid_Option_Argument =>
          UPut_Line ("Invalid value for option " & Exception_Message (Error));

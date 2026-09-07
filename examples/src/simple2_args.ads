@@ -130,7 +130,7 @@ package Simple2_Args is
 
    function Arg_Handler (Start_With : Positive; Arg : String) return Boolean;
 
-   AP : Argument_Parser :=
-     Make_Argument_Parser ("simple [options] arguments...", Arg_Handler'Access, Options'Access);
+   AP : Parser :=
+     Make_Parser ("simple [options] arguments...", Arg_Handler'Access, Options'Access);
 
 end Simple2_Args;
