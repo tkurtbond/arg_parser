@@ -198,13 +198,13 @@ procedure Simple is
       return True;
    end Arg_Handler;
 
-   AP : Parser :=
+   The_Parser : Parser :=
      Make_Parser ("simple [options] arguments...", Arg_Handler'Unrestricted_Access, Options'Unrestricted_Access);
 
    function Do_Help return Boolean is
       End_Program : exception;
    begin
-      Usage (AP);
+      Usage (The_Parser);
       --  Once they ask for help it is too late to continue.
       raise End_Program;
       return False;
@@ -219,7 +219,7 @@ begin
    Put_Line ("This is output from parsing the command line in the program SIMPLE.");
    New_Line;
 
-   Parse_Arguments (AP);
+   Parse_Arguments (The_Parser);
    New_Line;
    Put_Line ("After parsing the arguments:");
    New_Line;

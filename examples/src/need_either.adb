@@ -28,9 +28,9 @@ procedure Need_Either is
           (Description  => "Either Short_Name or Long_Name has to be specified and non-null.",
            Handler      => Do_Must_Have_Short_Or_Long_Name'Unrestricted_Access));
 
-   AP : Parser :=
+   The_Parser : Parser :=
      Make_Parser ("simple [options] arguments...", Arg_Handler'Unrestricted_Access, Options'Unrestricted_Access);
 
 begin
-   Parse_Arguments (AP, 1);
+   Parse_Arguments (The_Parser, 1);
 end Need_Either;

@@ -29,7 +29,7 @@ begin
    Put_Line ("This is output from parsing the command line in the program SIMPLE2.");
    New_Line;
 
-   Parse_Arguments (AP);
+   Parse_Arguments (The_Parser);
    New_Line;
    Put_Line ("After parsing the arguments:");
    New_Line;

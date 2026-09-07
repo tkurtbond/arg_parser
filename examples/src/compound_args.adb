@@ -6,7 +6,7 @@ package body Compound_Args is
 
    function Do_Main_Help return Boolean is
    begin
-      Usage (AP);
+      Usage (Main_Parser);
       --  Once they ask for help it is too late to continue.
       return False;
    end Do_Main_Help;
@@ -31,7 +31,7 @@ package body Compound_Args is
 
    function Do_List_Help return Boolean is
    begin
-      Usage (AP);       -- Always use the top level argument parser!
+      Usage (Main_Parser);       -- Always use the top level argument parser!
       --  Once they ask for help it is too late to continue.
       return False;
    end Do_List_Help;

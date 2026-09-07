@@ -59,7 +59,7 @@ package body Simple2_Args is
    function Do_Help return Boolean is
       End_Program : exception;
    begin
-      Usage (AP);
+      Usage (The_Parser);
       --  Once they ask for help it is too late to continue.
       raise End_Program;
       return False;

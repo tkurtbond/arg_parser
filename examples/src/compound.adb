@@ -5,6 +5,6 @@ with Compound_Args; use Compound_Args;
 
 procedure Compound is
 begin
-   Parse_Arguments (AP);
+   Parse_Arguments (Main_Parser);
    Put_Line ("Compound is exiting");
 end Compound;

@@ -45,7 +45,7 @@ package Compound_Args is
          Make_Parser
            (Description => "Show command", Handler => Show_Argument_Handler'Access, Options => Show_Options'Access)));
 
-   AP : Parser :=
+   Main_Parser : Parser :=
      Make_Parser
        ("Usage: compund [options] [args] " & ASCII.LF & ASCII.LF &
         "Example of a program that implements multiple commands.",
