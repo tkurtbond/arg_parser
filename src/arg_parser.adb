@@ -434,8 +434,9 @@ package body Arg_Parser is
 
       function Dispatch_Option_Handler (Flag : String; Opt : Option; Arg : String) return Boolean is
          function Verify_Integer (First : Integer; Last : Integer) return Integer is
-            Integer_Arg : Integer := Integer'Value (Arg);
+            Integer_Arg : Integer;
          begin
+            Integer_Arg := Integer'Value (Arg);
             if Integer_Arg < First or else Integer_Arg > Last then
                raise Invalid_Option_Argument with
                  "Value """ & Arg & """ not in range " &
@@ -598,5 +599,6 @@ package body Arg_Parser is
          raise;
       when Error : Invalid_Option_Argument =>
          UPut_Line ("Invalid value for option " & Exception_Message (Error));
+         raise;
    end Parse_Arguments;
 end Arg_Parser;
