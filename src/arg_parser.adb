@@ -529,31 +529,40 @@ package body Arg_Parser is
          end if;
       end Handle_Long_Option;
 
+      --  Handles a cluster of one or more short options, like -a or -abc,
+      --  the way POSIX getopt does.  Options that take no argument can be
+      --  clustered freely.  An option that requires an argument takes the
+      --  rest of the cluster as its argument if there is any (-i10, or
+      --  -ai10), and otherwise the next command line argument (-i 10, or
+      --  -ai 10); either way it ends the cluster, so in -ia the "a" is the
+      --  argument of -i, not another option.  Processing of the cluster
+      --  stops as soon as a handler returns False.
       procedure Handle_Short_Options (Arg : String; Arg_Index : Integer) is
       begin
-         for J in 2 .. Arg'Last loop
+         for J in Arg'First + 1 .. Arg'Last loop
+            exit when not Continue;
             declare
                Option_Name  : String  := Arg (J .. J);
                Option_Index : Natural := Get_Option ("-", Option_Name);
+               Opt          : Option renames Options (Option_Index);
             begin
-               if Option_Index > 0 then
-                  declare
-                     Opt : Option renames Options (Option_Index);
-                  begin
-                     if Opt.Argument_Required then
-                        if Arg_Index = Number_Of_Arguments
-                           or else (Argument (Arg_Index + 1)'Length > 1
-                                    and then Argument (Arg_Index + 1) (1) = '-')
-                        then
-                           Error_Seen;
-                           raise Argument_Required with "-" & Arg (J);
-                        end if;
-                        Continue := Dispatch_Option_Handler (Option_Name, Opt, Argument (Arg_Index + 1));
-                        Skip_Next_Option := True;
-                     else
-                        Continue := Dispatch_Option_Handler (Option_Name, Opt, "");
-                     end if;
-                  end;
+               if not Opt.Argument_Required then
+                  Continue := Dispatch_Option_Handler ("-" & Option_Name, Opt, "");
+               elsif J < Arg'Last then
+                  --  The rest of the cluster is the argument.
+                  Continue := Dispatch_Option_Handler ("-" & Option_Name, Opt, Arg (J + 1 .. Arg'Last));
+                  exit;
+               else
+                  --  The argument is the next command line argument.
+                  if Arg_Index = Number_Of_Arguments
+                     or else (Argument (Arg_Index + 1)'Length > 1
+                              and then Argument (Arg_Index + 1) (1) = '-')
+                  then
+                     Error_Seen;
+                     raise Argument_Required with "-" & Option_Name;
+                  end if;
+                  Continue := Dispatch_Option_Handler ("-" & Option_Name, Opt, Argument (Arg_Index + 1));
+                  Skip_Next_Option := True;
                end if;
             end;
          end loop;
@@ -570,9 +579,11 @@ package body Arg_Parser is
                Skip_Next_Option := False;
             elsif Arg = "--" and then not Found_Dash_Dash then
                Found_Dash_Dash := True;
-            elsif Found_Dash_Dash or else Arg'Length = 0 or else
+            elsif Found_Dash_Dash or else Arg'Length = 0 or else Arg = "-" or else
                   (Arg'Length >= 1 and then Arg (Arg'First) /= '-')
             then
+               --  A "-" by itself is an argument, not an option: by
+               --  convention it names standard input or output.
                Handle_Argument (Arg, Arg_Index);
             elsif Arg'Last > 1 and then Arg (2) = '-' then
                Handle_Long_Option (Arg, Arg_Index);
