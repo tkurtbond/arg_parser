@@ -433,20 +433,21 @@ package body Arg_Parser is
       end Handle_Argument;
 
       function Dispatch_Option_Handler (Flag : String; Opt : Option; Arg : String) return Boolean is
+         --  The messages start with the option, since Parse_Arguments
+         --  prints them after "Invalid value for option ".
          function Verify_Integer (First : Integer; Last : Integer) return Integer is
             Integer_Arg : Integer;
          begin
             Integer_Arg := Integer'Value (Arg);
             if Integer_Arg < First or else Integer_Arg > Last then
                raise Invalid_Option_Argument with
-                 "Value """ & Arg & """ not in range " &
-                 Trim (First'Image, Both) & ".." & Trim (Last'Image, Both) &
-                 " for option """ & Flag & """";
+                 Flag & ": """ & Arg & """ is not in range " &
+                 Trim (First'Image, Both) & ".." & Trim (Last'Image, Both);
             end if;
             return Integer_Arg;
          exception
             when Constraint_Error =>
-               raise Invalid_Option_Argument with "Invalid option argument """ & Arg & """ for option """ & Flag & """";
+               raise Invalid_Option_Argument with Flag & ": """ & Arg & """ is not an integer";
          end Verify_Integer;
 
       begin
@@ -553,11 +554,10 @@ package body Arg_Parser is
                   Continue := Dispatch_Option_Handler ("-" & Option_Name, Opt, Arg (J + 1 .. Arg'Last));
                   exit;
                else
-                  --  The argument is the next command line argument.
-                  if Arg_Index = Number_Of_Arguments
-                     or else (Argument (Arg_Index + 1)'Length > 1
-                              and then Argument (Arg_Index + 1) (1) = '-')
-                  then
+                  --  The argument is the next command line argument,
+                  --  even if it starts with "-", as with getopt and
+                  --  long options: "-w -5" gives -w the value -5.
+                  if Arg_Index = Number_Of_Arguments then
                      Error_Seen;
                      raise Argument_Required with "-" & Option_Name;
                   end if;
@@ -605,10 +605,14 @@ package body Arg_Parser is
          raise;
       when Error : Argument_Required =>
          UPut_Line ("Argument Required for option " & Exception_Message (Error));
-         New_Line;
+         UNew_Line;
          Usage (The_Parser);
          raise;
       when Error : Invalid_Option_Argument =>
+         --  Raised by Verify_Integer or by a user's handler, neither of
+         --  which has called Error_Seen, so the message would
+         --  otherwise go to standard output.
+         Error_Seen;
          UPut_Line ("Invalid value for option " & Exception_Message (Error));
          raise;
    end Parse_Arguments;

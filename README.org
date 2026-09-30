@@ -17,9 +17,12 @@ an argument uses the rest of its cluster as the argument if there is
 any (~-i10~, ~-ai10~) and the next command line argument otherwise
 (~-i 10~, ~-ai 10~).  Long options take their argument either after an
 equals sign (~--integer=10~) or as the next command line argument
-(~--integer 10~).  A ~-~ by itself is an ordinary argument, not an
-option, since by convention it names standard input or output, and
-everything after ~--~ is an argument even if it starts with ~-~.
+(~--integer 10~).  Either way, the next command line argument is taken
+even if it starts with ~-~, so ~-i -10~ and ~--integer -10~ give -10.
+A ~-~ by itself is an ordinary argument, not an option, since by
+convention it names standard input or output, and everything after
+~--~ is an argument even if it starts with ~-~.  Error messages go to
+standard error.
 
 The options are represented by an array of values of the ~Option~
 type, which has a number of different variants which represent the

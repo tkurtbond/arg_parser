@@ -1,0 +1,46 @@
+#! /usr/bin/env bash
+# Checks option arguments that start with "-", and that error messages
+# go to standard error, using the simple2 example.  Prints ok/FAIL per
+# check and exits 1 if any failed.
+# Run from arg_parser/examples, after building them (gprbuild -P examples.gpr).
+
+prog=${1:-bin/development/simple2}
+tmp=$(mktemp -d)
+trap 'rm -rf "$tmp"' EXIT
+failed=0
+
+# check LABEL WHERE PATTERN ARGS...: run prog ARGS; require a line
+# matching the grep -E PATTERN in WHERE (out or err), and, when WHERE
+# is err, no line starting with PATTERN's text in standard output.
+check() {
+  local label=$1 where=$2 pattern=$3; shift 3
+  "$prog" "$@" >"$tmp/out" 2>"$tmp/err" </dev/null
+  if ! grep -qE -- "$pattern" "$tmp/$where"; then
+    echo "FAIL - $label: no line matching /$pattern/ in standard $where"
+    sed 's/^/    out: /' "$tmp/out"; sed 's/^/    err: /' "$tmp/err"; failed=$((failed + 1))
+  elif [ "$where" = err ] && grep -qE -- "$pattern|^simple \[options\]" "$tmp/out"; then
+    echo "FAIL - $label: the message or usage went to standard output"
+    sed 's/^/    out: /' "$tmp/out"; failed=$((failed + 1))
+  else
+    echo "ok   - $label"
+  fi
+}
+
+check "a short option takes a next argument that starts with -" out \
+  '^The_Integer \(Default -2\) is +-10$' -I -10
+check "a long option takes a next argument that starts with -" out \
+  '^The_Integer \(Default -2\) is +-10$' --set-integer -10
+check "a short option still takes the rest of its cluster" out \
+  '^The_Integer \(Default -2\) is +-10$' -I-10
+check "an integer out of range is reported on standard error" err \
+  '^Invalid value for option -i: "500" is not in range -100\.\.100$' -i 500
+check "an integer out of range is reported for a long option too" err \
+  '^Invalid value for option --integer: "-500" is not in range -100\.\.100$' --integer -500
+check "a value that isn't an integer is reported on standard error" err \
+  '^Invalid value for option -n: "abc" is not an integer$' -n abc
+check "a missing argument is reported on standard error" err \
+  '^Argument Required for option -I$' -I
+check "an unknown option is reported on standard error" err \
+  '^Unknown option -x$' -x
+
+if [ "$failed" -eq 0 ]; then echo "All checks passed."; else echo "$failed check(s) failed."; exit 1; fi
