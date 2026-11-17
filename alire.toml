@@ -9,8 +9,11 @@ licenses = "GPL-3.0-or-later AND GPL-3.0-or-later WITH GCC-exception-3.1"
 website = ""
 tags = ["cli"]
 
-# Look at alire_default.gpr in alire subdirectory for settings
-project-files = ["alire/alire_default.gpr"]
+# The project file is arg_parser.gpr, Alire's default, the same one a
+# build without Alire uses.  Its BUILD (development, the default, or
+# release) picks the switches: alr build -- -XBUILD=release.
+[gpr-externals]
+BUILD = ["development", "release"]
 
 [configuration]
 output_dir = "alire/config"

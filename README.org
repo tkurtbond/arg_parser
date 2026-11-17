@@ -58,6 +58,18 @@ from the arrays of options and commands.
 It was inspired by a [[https://git.sr.ht/~jemarch/godcc/tree/master/item/src/argp.a68][command line parser written in Algol 68]], as well
 as the [[https://ocaml.org/manual/5.4/api/type_Arg.html][OCaml Arg]] module and the [[https://wiki.call-cc.org/eggref/5/args#args][Chicken Scheme Args]] module.
 
+** Building and installing
+With Alire, ~alr build~ (~alr build -- -XBUILD=release~ for the
+release switches).  Without it, with GNAT and gprbuild:
+#+BEGIN_SRC bash
+  make                                                # build
+  make install GPRINSTALL="gprinstall --prefix=DIR"   # build, then install
+#+END_SRC
+which installs ~DIR/share/gpr/arg_parser.gpr~ for gprbuild to find on
+~GPR_PROJECT_PATH~.  ~BUILD=release~ gives the release switches
+(~development~, the default, adds assertions and checks).  Both ways
+build from the same ~arg_parser.gpr~.
+
 The license is "GPL-3.0-or-later AND GPL-3.0-or-later WITH GCC-exception-3.1".
 
 The package source is [[file:src/arg_parser.ads][arg_parser.ads]] and [[file:src/arg_parser.adb][arg_parser.adb]].
